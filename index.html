@@ -41,6 +41,9 @@
       <br />
       <h2>The state of the galaxy</h2>
       <br />
+      <!-- <img src="Rocket.jpg" alt="Rocket" />
+      <br />
+      <br /> -->
       The unveil of the photograph of the
       <a
         href="https://www.nasa.gov/mission_pages/chandra/news/black-hole-image-makes-history/"
@@ -92,27 +95,38 @@
     </div>
     <br />
 
-    <div id='michaels-D3' class="usa-width-one-whole">
+    <div id="michaels-D3" class="usa-width-one-whole">
       <!-- Michael's d3 chart -->
       <div class="key-filters">
-        <fieldset id='system-filter' class="usa-fieldset-inputs">
-            <ul class="usa-unstyled-list">
-              <li>
-                <input id="all-systems" type="radio" checked name="system-filter" value="1">
-                <label for="all-systems">All Systems</label>
-              </li>
-              <li>
-                <input id="earth-like" type="radio" name="system-filter" value="2">
-                <label for="earth-like">Earth-like Systems</label>
-              </li>
-            </ul>
-          </fieldset>
-    </div>
-    <div class="tooltip"></div>
-    <div class="sysDesc">
-      <div class="name"></div>
-      <div class="desc"></div>
-    </div>
+        <fieldset id="system-filter" class="usa-fieldset-inputs">
+          <ul class="usa-unstyled-list">
+            <li>
+              <input
+                id="all-systems"
+                type="radio"
+                checked
+                name="system-filter"
+                value="1"
+              />
+              <label for="all-systems">All Systems</label>
+            </li>
+            <li>
+              <input
+                id="earth-like"
+                type="radio"
+                name="system-filter"
+                value="2"
+              />
+              <label for="earth-like">Earth-like Systems</label>
+            </li>
+          </ul>
+        </fieldset>
+      </div>
+      <div class="tooltip"></div>
+      <div class="sysDesc">
+        <div class="name"></div>
+        <div class="desc"></div>
+      </div>
     </div>
 
     <!-- <div id="aboutus"> -->
@@ -125,7 +139,7 @@
     <footer>
       <div>
         <script src="https://d3js.org/d3.v5.min.js"></script>
-    	  <script src="main.js"></script>
+        <script src="main.js"></script>
       </div>
     </footer>
   </body>
