@@ -54,6 +54,10 @@ header {
   margin: 0, auto;
 }
 
+.d3-eva {
+  margin-left: 30px;
+}
+
 /* Michael's d3 styles */
 
 #michaels-D3 {
