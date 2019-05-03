@@ -430,6 +430,8 @@ let earth = planetComparison.append('circle')
           .attr('width', function (s){            
             return distanceScale(s.distance)
           })
+
+          distanceGraph.selectAll('text').remove()
         
           distanceGraph.selectAll('text')
           .data([
