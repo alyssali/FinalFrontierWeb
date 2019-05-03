@@ -135,10 +135,6 @@ padding: 10px 5px;
 background: #fff;
 }
 
-.desc > div > h4 {
-  margin: 0;
-}
-
 div.planetDesc {	
   position: absolute;
   min-width: 200px;
