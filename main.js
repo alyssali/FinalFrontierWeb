@@ -329,7 +329,9 @@ let earth = planetComparison.append('circle')
           .html("<h4>" + d.system + '</h4>' + 
           '<strong>distance: </strong>' + parseFloat(d.distance).toLocaleString('en') + ' Lightyears' +
           '<br/>' +
-          '<strong>Planets: </strong>' + d.planets.length)
+          '<strong>Planets: </strong>' + d.planets.length +
+          '<br/>' +
+          '<strong>Discovery Method: </strong>' + d.planets[0].method)
         
         systemStar.attr('r', starScale(d.stars[0].mass))
           .attr('fill', '#ff9d1e')
