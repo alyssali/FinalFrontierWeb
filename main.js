@@ -222,6 +222,10 @@ let earth = planetComparison.append('circle')
     .attr('width', '300px')
     .attr('height', '300px')
 
+  const discoveryViz = systemDescription.select('.desc')
+    .append('div')
+    .attr('id', 'method-viz')
+
   systemDescription.select('.desc')
     .append('div')
     .attr('id', 'distance')
@@ -329,9 +333,36 @@ let earth = planetComparison.append('circle')
           .html("<h4>" + d.system + '</h4>' + 
           '<strong>distance: </strong>' + parseFloat(d.distance).toLocaleString('en') + ' Lightyears' +
           '<br/>' +
-          '<strong>Planets: </strong>' + d.planets.length +
-          '<br/>' +
-          '<strong>Discovery Method: </strong>' + d.planets[0].method)
+          '<strong>Planets: </strong>' + d.planets.length)
+
+        discoveryViz.select('#method-img').remove()
+        discoveryViz.select('h4').remove()
+
+
+        discoveryViz.append('h4').html('Method - ' + d.planets[0].method)
+
+        discoveryViz.append('img')
+          .attr('id', 'method-img')
+          .attr('width', '200px')
+          .style('margin', '0 auto')
+          .style('display', 'block')
+          .attr('src', function(){
+            if (d.planets[0].method === 'transit'){
+              return 'transit.png'
+            }
+            if (d.planets[0].method === 'timing'){
+              return 'timing.png'
+            }
+            if (d.planets[0].method === 'microlensing'){
+              return 'microlensing.png'
+            }
+            if (d.planets[0].method === 'RV'){
+              return 'rv.png'
+            }
+            if (d.planets[0].method === 'imaging'){
+              return 'imaging.png'
+            }
+          })
         
         systemStar.attr('r', starScale(d.stars[0].mass))
           .attr('fill', '#ff9d1e')
