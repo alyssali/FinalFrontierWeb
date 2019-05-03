@@ -15,8 +15,8 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  font-family:  "Helvetica Neue", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", sans-serif;
   margin: 0;
   font-size: 30px;
   -webkit-font-smoothing: antialiased;
@@ -50,12 +50,21 @@ header {
 }
 
 .tableau {
+  width: 900px;
   text-align: center;
-  margin: 0, auto;
+  margin: 0 auto;
 }
 
-.d3-eva {
-  margin-left: 30px;
+.methodsInfo {
+  width: 900px;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.chartDesc {
+  width: 900px;
+  text-align: left;
+  margin: 0 auto;
 }
 
 /* Michael's d3 styles */
@@ -248,6 +257,7 @@ dfn {
  * contexts in Firefox 4+, Safari, and Chrome.
  */
 h1 {
+  font-family: 'Futura', 'Helvetica Neue', sans-serif;
   font-size: 2em;
   margin: 20px;
 }
@@ -2110,7 +2120,6 @@ h2,
   letter-spacing: -0.021em;
 }
 
-h1,
 h2,
 h3,
 h4,
@@ -2126,16 +2135,20 @@ h6 {
 }
 
 h1 {
+  font-family:'Futura', 'Helvetica Neue', sans-serif;
+  font-stretch: extra-condensed;
   font-size: 6.4rem;
-  font-weight: 700;
+  font-weight: 900;
 }
 
 h2 {
+  font-family:'Futura', 'Helvetica Neue', sans-serif;
   font-size: 3.4rem;
   font-weight: 700;
 }
 
 h3 {
+  font-family:'Futura', 'Helvetica Neue', sans-serif;
   font-size: 2.4rem;
   font-weight: 700;
 }
