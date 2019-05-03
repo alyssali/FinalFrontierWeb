@@ -348,7 +348,7 @@ let earth = planetComparison.append('circle')
           .style('display', 'block')
           .attr('src', function(){
             if (d.planets[0].method === 'transit'){
-              return 'transit.png'
+              return 'RV.png'
             }
             if (d.planets[0].method === 'timing'){
               return 'timing.png'
@@ -357,7 +357,7 @@ let earth = planetComparison.append('circle')
               return 'microlensing.png'
             }
             if (d.planets[0].method === 'RV'){
-              return 'rv.png'
+              return 'transit.png'
             }
             if (d.planets[0].method === 'imaging'){
               return 'imaging.png'
