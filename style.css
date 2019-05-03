@@ -53,7 +53,12 @@ header {
   width: 900px;
   text-align: center;
   margin: 0 auto;
-  
+}
+
+.chartDesc {
+  width: 900px;
+  text-align: left;
+  margin: 0 auto;
 }
 
 /* Michael's d3 styles */
