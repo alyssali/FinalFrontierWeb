@@ -152,6 +152,8 @@ d3.xml("systems.xml").then(function(dataset) {
   const planetDetails = d3.select(".planetDesc")
   .style("opacity", 0);
 
+  planetDetails.select('.desc').append('div').html('<h4>Size in Jupiter Masses</h4>')
+
 const planetComparison = planetDetails.select('.desc')
   .append('svg')
   .attr('width', '300px')
@@ -165,6 +167,18 @@ let earth = planetComparison.append('circle')
     .attr('id', 'earth')
     .attr('fill', 'blue')
     .attr('r', planetSizeScale(0.0031457007))
+
+  planetComparison.append('text')
+    .attr('x', '100')
+    .attr('y', '130')
+    .attr("text-anchor", "middle")
+    .text('Earth')
+  
+  planetComparison.append('text')
+    .attr('x', '100')
+    .attr('y', '150')
+    .attr("text-anchor", "middle")
+    .text('0.00314')
 
   let exoplanet = planetComparison.append('circle')
       .attr('cx', '200')
@@ -285,8 +299,8 @@ let earth = planetComparison.append('circle')
                     '<strong>Planets: </strong>' + d.planets.length +
                     '<br/>' +
                     '<strong>distance: </strong>' + parseFloat(d.distance).toLocaleString('en') + ' Lightyears')	
-          .style("left", (d3.event.pageX + 5) + "px")		
-          .style("top", (d3.event.pageY - 62) + "px");	
+          .style("left", (parseFloat(d3.select('#' + d.system.replace(/ /g, '_').replace(/\+/g, '_')).attr('cx')) + 15) + "px")		
+          .style("top", (parseFloat(d3.select('#' + d.system.replace(/ /g, '_').replace(/\+/g, '_')).attr('cy')) - 75) + "px");	
       })					
     .on("mouseout", function(d) {		
         toolTip.transition()		
@@ -389,6 +403,22 @@ let earth = planetComparison.append('circle')
 
             planetComparison.select('#exoplanet')
               .attr('r', planetSizeScale(p.mass))
+
+            d3.selectAll('.exoplanet-mass').remove()
+
+            planetComparison.append('text')
+              .attr('class', 'exoplanet-mass')
+              .attr('x', '200')
+              .attr('y', 130 + planetSizeScale(p.mass))
+              .attr("text-anchor", "middle")
+              .text(p.name)
+            
+            planetComparison.append('text')
+              .attr('class', 'exoplanet-mass')
+              .attr('x', '200')
+              .attr('y', 150 + planetSizeScale(p.mass))
+              .attr("text-anchor", "middle")
+              .text(p.mass)
 
               planetDetails
               .style("left", (width/3 + 400) + "px")		
