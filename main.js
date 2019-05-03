@@ -357,7 +357,7 @@ let earth = planetComparison.append('circle')
               return 'microlensing.png'
             }
             if (d.planets[0].method === 'RV'){
-              return 'rv.png'
+              return 'RV.png'
             }
             if (d.planets[0].method === 'imaging'){
               return 'imaging.png'
