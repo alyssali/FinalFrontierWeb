@@ -60,10 +60,12 @@ d3.xml("systems.xml").then(function(dataset) {
   }
   const padding = 10
   const scatterDiv = d3.select("#michaels-D3")
-  .style("pointer-events", "all")
+  .append('div')
+  .attr("id", "scatter-plot")
   .style('width', '100%')
-  let width = parseInt(window.getComputedStyle(d3.select("#michaels-D3").node()).width) - margin.left - margin.right
-  let height = parseInt(window.getComputedStyle(d3.select("#michaels-D3").node()).height) - margin.top - margin.bottom
+  .style('height', '100%')
+  let width = parseInt(window.getComputedStyle(d3.select("#scatter-plot").node()).width) - margin.left - margin.right
+  let height = parseInt(window.getComputedStyle(d3.select("#scatter-plot").node()).height) - margin.top - margin.bottom
   let scale = 2.0
   
   var svg = scatterDiv.append("svg")
@@ -114,6 +116,61 @@ d3.xml("systems.xml").then(function(dataset) {
       return d.distance;
     })])
     .range([5, 1]);
+  
+  let starScale = d3.scaleLinear()
+  .domain([d3.min(data, function(d) {
+    return typeof d.stars[0] !== 'undefined' ? d.stars[0].mass : 0;
+  }), d3.max(data, function(d) {
+    return typeof d.stars[0] !== 'undefined' ? d.stars[0].mass : 0;
+  })])
+  .range([10, 25]);
+
+  let orbitScale = d3.scaleLinear()
+  .domain([d3.min(data, function(d) {
+    return typeof d.planets[0] !== 'undefined' & d.planets[0].periastron !== 0 ? d.planets[0].periastron : 5;
+  }), d3.max(data, function(d) {
+    return typeof d.planets[0] !== 'undefined' & d.planets[0].periastron !== 0 ? d.planets[0].periastron : 5;
+  })])
+  .range([30, 60]);
+
+  let orbitingPlanetSizeScale = d3.scaleLinear()
+  .domain([d3.min(data, function(d) {
+    return typeof d.planets[0] !== 'undefined' ? d.planets[0].mass : 0.0031457007;
+  }), d3.max(data, function(d) {
+    return typeof d.planets[0] !== 'undefined' ? d.planets[0].mass : 0.0031457007;
+  })])
+  .range([5, 20]);
+
+  let planetSizeScale = d3.scaleLinear()
+  .domain([d3.min(data, function(d) {
+    return typeof d.planets[0] !== 'undefined' ? d.planets[0].mass : 0.0031457007;
+  }), d3.max(data, function(d) {
+    return typeof d.planets[0] !== 'undefined' ? d.planets[0].mass : 0.0031457007;
+  })])
+  .range([5, 100]);
+
+  const planetDetails = d3.select(".planetDesc")
+  .style("opacity", 0);
+
+const planetComparison = planetDetails.select('.desc')
+  .append('svg')
+  .attr('width', '300px')
+  .attr('height', '200px')
+const planetDescription = planetDetails.select('.desc')
+  .append('div')
+
+let earth = planetComparison.append('circle')
+    .attr('cx', '100')
+    .attr('cy', '100')
+    .attr('id', 'earth')
+    .attr('fill', 'blue')
+    .attr('r', planetSizeScale(0.0031457007))
+
+  let exoplanet = planetComparison.append('circle')
+      .attr('cx', '200')
+      .attr('cy', '100')
+      .attr('fill', 'green')
+      .attr('id', 'exoplanet')
 
   var xAxis = d3.axisBottom().scale(xScale).ticks(5);
   var yAxis = d3.axisLeft().scale(yScale).ticks(5);
@@ -145,6 +202,30 @@ d3.xml("systems.xml").then(function(dataset) {
   const systemDescription = d3.select(".sysDesc")
     .style("opacity", 0);
 
+  const solarSystem = systemDescription.select('.desc')
+    .append('div')
+    .append('svg')
+    .attr('width', '300px')
+    .attr('height', '300px')
+
+  systemDescription.select('.desc')
+    .append('div')
+    .attr('id', 'distance')
+    .html('<h4>Distance From Earth</h4>');
+
+  const distanceGraph = systemDescription.select('#distance')
+    .append('svg')
+    .attr('id', 'distanceGraph')
+    .attr('width', '300px')
+    .attr('height', '110px')
+    .append("g")
+    .attr("transform", "translate(2, 0)");
+
+  
+  const systemStar = solarSystem.append('circle')
+    .attr('cx', 150)
+    .attr('cy', 150)
+
   starGroup.selectAll("circle")
     .data(data)
     .enter()
@@ -169,13 +250,6 @@ d3.xml("systems.xml").then(function(dataset) {
         }
       }
 
-      // for(i in d.stars){
-      //   if (d.stars[i].temperature >= 5278 && d.stars[i].temperature <= 6278 ){
-      //     sunlike = true
-      //     break
-      //   }
-      // }
-
       if(earthlike) {
         console.log(d.system);
         earthlikeSystems.push(d.system);
@@ -192,14 +266,6 @@ d3.xml("systems.xml").then(function(dataset) {
           break
         }
       }
-
-      // for(i in d.stars){
-      //   if (d.stars[i].temperature >= 5278 && d.stars[i].temperature <= 6278 ){
-      //     sunlike = true
-      //     break
-      //   }
-      // }
-
       if(earthlike) {
         console.log(d.system);
         return 0.7
@@ -230,15 +296,12 @@ d3.xml("systems.xml").then(function(dataset) {
     .on('click',  function(d) {
       toolTip.style('opacity', 0)
       systemDescription.style('opacity', 0)
+      planetDetails.style('opacity', 0)
 
       starGroup.select('.focused').remove()
       starGroup.selectAll('line').remove()
-
-      console.log(d3.event.srcElement.id);
       
       selected_system = d3.select(`#${d3.event.srcElement.id}`)
-      console.log(-selected_system.attr('cx'),-selected_system.attr('cy'));
-
       
       starGroup.append('circle').classed('focused', true)
         .attr('cx', (selected_system.attr('cx')))
@@ -248,31 +311,147 @@ d3.xml("systems.xml").then(function(dataset) {
         .attr('stroke', 'black')
         .attr('stroke-wdith', 2)
 
-        let planetsHTML = ''
-        for(i in d.planets){
-          let planet = d.planets[i]
-          planetsHTML+= '<h5>' + planet.name + '</h5>' +
-          '<strong>discovered: </strong>' + planet.discovered +
-          '<br/>' +
-          '<strong>Method: </strong>' + planet.method +
-          '<br/>' +
-          '<strong>Status: </strong>' + planet.status +
-          '<br/>' +
-          '<strong>Mass: </strong>' + planet.mass +
-          '<br/>' +
-          '<strong>Description: </strong>' + planet.description +
-          '<br/>'
-        }
-
         systemDescription.select('.name')
           .html("<h4>" + d.system + '</h4>' + 
           '<strong>distance: </strong>' + parseFloat(d.distance).toLocaleString('en') + ' Lightyears' +
           '<br/>' +
           '<strong>Planets: </strong>' + d.planets.length)
+        
+        systemStar.attr('r', starScale(d.stars[0].mass))
+          .attr('fill', '#ff9d1e')
 
-        systemDescription.select('.desc')
-        .html(planetsHTML)
+        let planets = d.planets
+        
+        solarSystem.selectAll('.orbits').remove()
+        solarSystem.selectAll('.orbits')
+          .data(planets)
+          .enter()
+          .append("circle")
+          .attr('class', 'orbits')
+          .attr('cx', systemStar.attr('cx'))
+          .attr('cy', systemStar.attr('cy'))
+          .attr("fill-opacity", 0)
+          .attr('stroke', 'black')
+          .attr('stroke-wdith', 2)
+          .attr('r', function(p, i){      
+            return p.periastron !== 0 ? orbitScale(p.periastron) : 20 * (i + 1) + 10
+          })
+        
+        solarSystem.selectAll('.planets').remove()
+        solarSystem.selectAll('.earthlike').remove()
+        solarSystem.selectAll('.planets')
+          .data(planets)
+          .enter()
+          .append("circle")
+          .attr('class', function(d){
+            if (d.mass >= 0.00252 && d.mass <= 0.005985){
+              return 'earthlike'
+            }
+            return 'planets'
+          })
+          .attr('fill', function(d){
+            if (d.mass >= 0.00252 && d.mass <= 0.005985){
+              return '#105bd8'
+            }
+            return '#aeb0b5'
+          })
+          .attr('cx', function(p, i){    
+            return p.periastron !== 0 ? parseFloat(systemStar.attr('cx')) + orbitScale(p.periastron) : parseFloat(systemStar.attr('cx')) + (20 * (i + 1) + 10)
+          })
+          .attr('cy', systemStar.attr('cy'))
+          .attr('r', function(p) {
+            return orbitingPlanetSizeScale(p.mass)
+          })
+          .on("mouseover", function(d) {
+            toolTip.raise()		
+            toolTip.transition()		
+                .duration(200)		
+                .style("opacity", .9);		
+            toolTip	.html('<h4>' + d.name + '</h4>')	
+                .style("left", (d3.event.pageX + 5) + "px")		
+                .style("top", (d3.event.pageY - 30) + "px");	
+            })					
+          .on("mouseout", function(d) {		
+              toolTip.transition()		
+                  .duration(500)		
+                  .style("opacity", 0);	
+          })
+          .on('click', function(p){
+            planetDetails.style('opacity', 0)
+            planetDetails.select('.name')
+              .html("<h4>" + p.name + '</h4>' +
+              '<strong>discovered: </strong>' + p.discovered +
+              '<br/>' +
+              '<strong>Status: </strong>' + p.status)
+
+            
+            planetDescription.html('<strong>Description: </strong>' + p.description )
+
+            planetComparison.select('#exoplanet')
+              .attr('r', planetSizeScale(p.mass))
+
+              planetDetails
+              .style("left", (width/3 + 400) + "px")		
+              .style("top", (height/2) + "px")
+              .transition()		
+                .duration(200)		
+                .style("opacity", .95);
+              planetDetails.raise()
+          })
+
+
+      if (solarSystem.selectAll('.earthlike')){
+        solarSystem.selectAll('.earthlike').call(pulsate)
+        //pulsate(solarSystem.select('.earthlike'))
+      }
+          
       
+      // DISTANCe GRAPH
+      let distanceScale = d3.scaleLinear()
+          .domain([0, d.distance])
+          .range([0, 275]);
+
+      distanceGraph.selectAll('rect').remove()
+
+      distanceGraph.selectAll('rect')
+          .data([
+            {exoplanet: "Alpha Centauri", distance: 1.295},
+            {exoplanet: d.system, distance: d.distance}])
+          .enter()
+          .append('rect')
+          .attr('opacity', 0.5)
+          .attr("y", function(d, i) { return i * 35 })
+          .attr('height', 20)
+          .transition()
+          .duration(1500)
+          .delay(200)
+          .attr('width', function (s){            
+            return distanceScale(s.distance)
+          })
+        
+          distanceGraph.selectAll('text')
+          .data([
+            {exoplanet: "Alpha Centauri", distance: 1.295},
+            {exoplanet: d.system, distance: d.distance}])
+          .enter()
+          .append('text')
+          .attr('class','below')
+          .attr('x', 5)
+          .attr("y", function(d, i) { return (35*i) + 15 })
+          .attr('text-anchor','left')
+          .text(function(d) {return d.exoplanet + ": " + d.distance + " lightyears";})
+          .style('font-size', '15px') 
+
+        const distanceAxis = d3.axisBottom()
+          .ticks("5")
+          .scale(distanceScale);
+          
+        distanceGraph.select('#distance-axis').remove()
+        distanceGraph.append("g")
+          .attr('id', 'distance-axis')
+          .attr("transform", "translate(0, 70)")
+          .call(distanceAxis);
+        
       starGroup.transition()
         .duration(750)
         .attr("transform", "translate(" + (width/3 - selected_system.attr('cx')) + "," + (height/2 - selected_system.attr('cy')) + ")")
@@ -330,8 +509,8 @@ d3.xml("systems.xml").then(function(dataset) {
 
     function resize() {
   
-      width = parseInt(window.getComputedStyle(d3.select("#michaels-D3").node()).width) - margin.left - margin.right
-      height = parseInt(window.getComputedStyle(d3.select("#michaels-D3").node()).height) - margin.top - margin.bottom
+      width = parseInt(window.getComputedStyle(d3.select("#scatter-plot").node()).width) - margin.left - margin.right
+      height = parseInt(window.getComputedStyle(d3.select("#scatter-plot").node()).height) - margin.top - margin.bottom
     
       // Update the range of the scale with new width/height
       xScale.range([0, width]);
@@ -372,6 +551,10 @@ d3.xml("systems.xml").then(function(dataset) {
       
       starGroup.select('.focused').remove()
       starGroup.selectAll('line').remove()
+      planetDetails.style('opacity', 0)
+        .style('left', 0)
+        .style('top', height)
+
 
       var new_xScale = d3.event.transform.rescaleX(xScale);
       var new_yScale = d3.event.transform.rescaleY(yScale);
@@ -385,18 +568,40 @@ d3.xml("systems.xml").then(function(dataset) {
         })
     }
 
-    function viewSystem(){
+    starGroup.on('click', function(){
+      toolTip.style('opacity', 0)
+        .style('left', 0)
+        .style('top', height)
+      systemDescription.style('opacity', 0)
+        .style('left', 0)
+        .style('top', height)
       
-      starGroup.select('circle')
-        .attr('cx', function(d) {return new_xScale(d.x)})
-        .attr('cy', function(d) {return new_yScale(d.y)})
-        .attr("r", function(d) {
-          return sizeScale(d.distance) * d3.event.transform.k;
-        })
+      starGroup.selectAll('line').remove()
+      planetDetails.style('opacity', 0)
+        .style('left', 0)
+        .style('top', height)
+    })
 
+    let trappist = d3.select('#TRAPPIST-1')
+
+    pulsate(trappist)
+
+    function pulsate(selection) {
+      recursive_transitions();
+  
+      function recursive_transitions() {
+          selection.transition()
+              .duration(400)
+              .attr("r", selection.attr('r'))
+              .transition()
+              .duration(800)
+              .attr("r", parseFloat(selection.attr('r')) *2)
+              .transition()
+              .duration(400)
+              .attr("r", parseFloat(selection.attr('r')))
+              .on("end", recursive_transitions);
+      }
     }
-
-    
     
     d3.select(window).on('resize', resize);
     

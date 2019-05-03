@@ -68,6 +68,9 @@ div.tooltip {
   border: 2px #d6d7d9 solid;		
   pointer-events: none;			
 }
+.tooltip > h4 {
+margin: 0;
+}
 div.key-filters {
 position: absolute;			
 padding:  5px 10px 5px 10px;				
@@ -84,32 +87,53 @@ margin: 0;
 padding: 0;
 }
 
+.usa-unstyled-list {
+margin-top: 0;
+margin-bottom: 0;
+list-style-type: none;
+padding-left: 0;
+}
+
 div.earthlike{
-  background-color: rgb(255, 157, 30);
-  padding: 8px;
-  float: left;
-  margin: 2px;
-  margin-right: 10px;
-  border-radius: 10px;
+background-color: rgb(255, 157, 30);
+padding: 8px;
+float: left;
+margin: 2px;
+margin-right: 10px;
+border-radius: 10px;
 }
 div.sysDesc {	
-    position: absolute;
-    min-width: 300px;
-    max-width: 400px;
-    border: 2px #d6d7d9 solid;		
+  position: absolute;
+  min-width: 300px;
+  max-width: 400px;
+  border: 2px #d6d7d9 solid;		
 }
 div.sysDesc > .name{
-  padding: 5px;
-  background: #d6d7d9;
+padding: 5px;
+background: #d6d7d9;
 }
 .name > h4{
-  margin: 0;
+margin: 0;
 }
-div.sysDesc > .desc{
-  max-height: 300px;	
-  overflow-y: scroll;
-  padding: 10px 5px;				
-  background: #fff;
+.desc{
+max-height: 300px;	
+overflow-y: scroll;
+padding: 10px 5px;				
+background: #fff;
+}
+
+div.planetDesc {	
+  position: absolute;
+  min-width: 200px;
+  max-width: 320px;
+  border: 2px #d6d7d9 solid;		
+}
+div.planetDesc > .desc {	
+max-height: 240px;		
+}
+div.planetDesc > .name{
+padding: 5px;
+background: #d6d7d9;
 }
 
 
