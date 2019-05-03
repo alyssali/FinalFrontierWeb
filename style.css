@@ -55,6 +55,12 @@ header {
   margin: 0 auto;
 }
 
+.methodsInfo {
+  width: 900px;
+  text-align: center;
+  margin: 0 auto;
+}
+
 .chartDesc {
   width: 900px;
   text-align: left;
