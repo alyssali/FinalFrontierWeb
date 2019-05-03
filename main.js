@@ -400,7 +400,9 @@ let earth = planetComparison.append('circle')
           })
 
 
-      if (solarSystem.selectAll('.earthlike')){
+      if (!solarSystem.select('.earthlike').empty()){
+        console.log(solarSystem.select('.earthlike'));
+        
         solarSystem.selectAll('.earthlike').call(pulsate)
         //pulsate(solarSystem.select('.earthlike'))
       }
